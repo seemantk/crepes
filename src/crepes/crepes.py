@@ -105,6 +105,20 @@ def parse_command_line_arguments():
     # return the parsed command line arguments
     return parser.parse_args()
 
+def get_aws_metadata(region, kwargs={}):
+    # Retrieve from AWS the zones in this region
+    ec2   = boto3.setup_default_session(region_name=region)
+    ec2   = boto3.client('ec2')
+    zones = ec2.describe_availability_zones()['AvailabilityZones']
+
+    # Populate the kwargs
+    kwargs['REGION']  = region
+    kwargs['AZs']     = [z['ZoneName'] for z in zones]
+    kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
+
+    return kwargs
+
+
 #
 # Main loop
 #
@@ -115,16 +129,9 @@ def main():
     outdir = os.path.dirname(os.path.abspath(args.outfile))
     os.makedirs(outdir, exist_ok=True)
 
-    # Find AWS metadata for this stack deployment
-    ec2   = boto3.setup_default_session(region_name=args.region)
-    ec2   = boto3.client('ec2')
-    zones = ec2.describe_availability_zones()['AvailabilityZones']
+    kwargs = get_aws_metadata(args.region, kwargs=args.kwargs or {})
 
-    kwargs = args.kwargs or {}
-    kwargs['REGION']  = args.region
-    kwargs['AZs']     = [z['ZoneName'] for z in zones]
-    kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
-
+    # If importing, process the ImportedResources  through jinja
     imports_template = process_jinja_template('ImportedResources.yml', kwargs) if args.imports else {}
 
     # Assemble the stack into a dict and convert that to yaml
