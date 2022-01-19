@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2020-2021 Seemant Kulleen <seemantk@gmail.com>
+# Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
 import os, boto3
 import argparse
@@ -10,8 +10,7 @@ from jinja2 import Template
 #
 # Helper functions
 #
-
-# Read raw yaml file and process as a Jinja template
+# Read raw YAML file and process as a Jinja template
 def process_jinja_template(filename, kwargs):
     with open(filename) as f:
         contents = f.read()
@@ -35,9 +34,8 @@ def assemble(stack, kwargs, imports={}):
         # Create an empty dictionary key for this section for all the files to add their data
         cfn_stack[sec] = {}
 
+        # Traverse the directory hierarchy, parsing all files along the way
         for dirpath, dirs, files in os.walk(os.path.join(stack, section)):
-
-
             for f in files:
                 # Process each file as a Jinja template first
                 contents = process_jinja_template(os.path.join(dirpath, f), kwargs)
@@ -55,7 +53,7 @@ def assemble(stack, kwargs, imports={}):
                         keys = contents.keys()
 
                     for key in keys:
-                        # Append each yaml object to the cfn_stack
+                        # Append each YAML object to the cfn_stack
                         if contents[key]:
                             cfn_stack[sec][key] = contents[key]
                 elif filename.endswith('.txt') or filename.endswith('text'):
@@ -86,6 +84,7 @@ def importify(resource, obj):
 
 
 def parse_command_line_arguments():
+    # Helper to parse keyword arguments for Jinja variables
     class ParseKwargs(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
             setattr(namespace, self.dest, dict())
@@ -95,7 +94,7 @@ def parse_command_line_arguments():
 
 
     # Available command line arguments and their defaults
-    parser = argparse.ArgumentParser(description='process jinja yaml files and assemble into a CloudFormation template')
+    parser = argparse.ArgumentParser(description='process jinja YAML files and assemble into a CloudFormation template')
     parser.add_argument('directory', metavar='dir', type=str, help='source directory')
     parser.add_argument('--region', dest='region', type=str, help='AWS Region')
     parser.add_argument('--output', dest='outfile', type=str, default='CloudFormation.yml', help='output CloudFormation YAML file')
@@ -105,13 +104,13 @@ def parse_command_line_arguments():
     # return the parsed command line arguments
     return parser.parse_args()
 
+
 def get_aws_metadata(region, kwargs={}):
-    # Retrieve from AWS the zones in this region
+    # Retrieve info about the specified AWS region
     ec2   = boto3.setup_default_session(region_name=region)
     ec2   = boto3.client('ec2')
     zones = ec2.describe_availability_zones()['AvailabilityZones']
 
-    # Populate the kwargs
     kwargs['REGION']  = region
     kwargs['AZs']     = [z['ZoneName'] for z in zones]
     kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
@@ -131,10 +130,11 @@ def main():
 
     kwargs = get_aws_metadata(args.region, kwargs=args.kwargs or {})
 
-    # If importing, process the ImportedResources  through jinja
+    # If importing the imports template is processed through Jinja, otherwise we get an empty dict
     imports_template = process_jinja_template('ImportedResources.yml', kwargs) if args.imports else {}
 
-    # Assemble the stack into a dict and convert that to yaml
+    # Assemble the stack into a dict and convert that to YAML 
+    # The imports_template variable is {} if not importing
     stack = assemble(args.directory, kwargs, imports=imports_template)
 
     if args.imports: # trim the stack based on the ImportedResources
