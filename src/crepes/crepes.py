@@ -68,23 +68,6 @@ def assemble(stack, kwargs, imports={}):
     return {k: v for k, v in cfn_stack.items() if v} # discard null/empty keys
 
 
-def importify(resource, obj):
-    obj['DeletionPolicy'] = 'Retain'
-
-    temp = {}
-    try:
-        for prop in imports[resource]['Property']:
-            print('Importing %s for %s' % (prop, resource))
-            temp[prop] = obj['Properties'][prop]
-    except KeyError: # e.g. SNSTopic requires TopicARN for import, but it is not a property in the template
-        pass
-
-    # Replace the Properties key with only the filtered items
-    obj['Properties'] = temp
-
-    return { 'ResourceType': obj['Type'], 'LogicalResourceId': resource, 'ResourceIdentifier': imports[resource]['Matcher'] }
-
-
 def parse_command_line_arguments():
     # Helper to parse keyword arguments for Jinja variables
     class ParseKwargs(argparse.Action):
