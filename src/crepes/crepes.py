@@ -42,26 +42,34 @@ def assemble(stack, kwargs, importing=False):
         cfn_stack[sec] = {}
 
         for dirpath, dirs, files in os.walk(os.path.join(stack, section)):
-            for f in files: # only read yml or txt files
-                if not (f.endswith('.yml') or f.endswith('txt')): continue
 
-                print("Flipping %s" % os.path.relpath(os.path.join(dirpath, f), '.'))
-                # process each file as a jinja template first
+
+            for f in files:
+                # Process each file as a Jinja template first
                 contents = process_jinja_template(os.path.join(dirpath, f), kwargs)
+                filename = f.lower()
 
-                try: # after jinja, we have pure yaml
+                if filename.endswith('.yml') or filename.endswith('yaml'):
+                    # Process YAML files (most everything)
+                    print("Flipping %s" % os.path.relpath(os.path.join(dirpath, f), '.'))
+
+                    # if this is an import template (rare)
                     if sec == 'Resources' and importing:
+                        # Only import keys specified in the file in arg.imports
                         keys = [key for key in contents.keys() if key in imports.keys()]
                     else:
                         keys = contents.keys()
 
                     for key in keys:
-                        # append each yaml object to the cfn_stack
+                        # Append each yaml object to the cfn_stack
                         if contents[key]:
                             cfn_stack[sec][key] = contents[key]
-                except AttributeError: # this was a txt file, not yaml
-                    # place the text into the cfn_stack
+                elif filename.endswith('.txt') or filename.endswith('text'):
+                    # Process the description text file
                     cfn_stack[sec] = contents
+                else:
+                    # Bypass files with other content
+                    continue
 
     return {k: v for k, v in cfn_stack.items() if v} # discard null/empty keys
 
