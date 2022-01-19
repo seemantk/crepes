@@ -29,7 +29,7 @@ def process_jinja_template(filename, kwargs):
 # Assemble all the components of a stack into a single cloudformation::stack object
 def assemble(stack, kwargs, importing=False):
     # Create a dictionary to hold all the information
-    stackobj = { 'AWSTemplateFormatVersion': '2010-09-09' }
+    cfn_stack = { 'AWSTemplateFormatVersion': '2010-09-09' }
 
     # Section names start with '0'
     sections = [l for l in os.listdir(stack) if l.startswith('0')]
@@ -39,7 +39,7 @@ def assemble(stack, kwargs, importing=False):
         sec = section.split('_')[1]
 
         # Create an empty dictionary key for this section for all the files to add their data
-        stackobj[sec] = {}
+        cfn_stack[sec] = {}
 
         for dirpath, dirs, files in os.walk(os.path.join(stack, section)):
             for f in files: # only read yml or txt files
@@ -56,14 +56,14 @@ def assemble(stack, kwargs, importing=False):
                         keys = contents.keys()
 
                     for key in keys:
-                        # append each yaml object to the stackobj
+                        # append each yaml object to the cfn_stack
                         if contents[key]:
-                            stackobj[sec][key] = contents[key]
+                            cfn_stack[sec][key] = contents[key]
                 except AttributeError: # this was a txt file, not yaml
-                    # place the text into the stackobj
-                    stackobj[sec] = contents
+                    # place the text into the cfn_stack
+                    cfn_stack[sec] = contents
 
-    return {k: v for k, v in stackobj.items() if v} # discard null/empty keys
+    return {k: v for k, v in cfn_stack.items() if v} # discard null/empty keys
 
 
 def importify(resource, obj):
