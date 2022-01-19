@@ -4,7 +4,7 @@ tl;dr: instead of editing massive CloudFormation files, edit small yaml files ar
 This project was inspired by [grapes](https://github.com/0x4447/0x4447-cli-node-grapes), an excellent tool written in Node.js. I love using CloudFormation templates. I had the same needs as [they did](https://github.com/0x4447/0x4447-cli-node-grapes/blob/development/README.md#-grapes), and using that tool opened up some interesting possbilities in my mind.
 If I was halfway competent in node, I would have submitted pull requests directly to grapes.  But I'm more comfortable in python, so I created this tool to address some of the needs I had as an AWS Architect and DevOps consultant.
 
-Firstly, I wanted to use TAML files rather than JSON. I find YAML much easier to understand. Also, YAML files are smaller than equivalent JSON files.
+Firstly, I wanted to use YAML files rather than JSON. I find YAML much easier to understand. Also, YAML files are smaller than equivalent JSON files.
 
 Secondly, I wanted to be able to create a base template which can be stretched or shrunk at deployment time to match the target region.  In CloudFormation there isn't (yet) a way to specify "I want one EC2 instance per Availabilty Zone, which would mean 4 in Ohio (us-east-2), 6 in Virginia (us-east-1) and 2 in Northern California (us-west-1).  By using Jinja to loop through the AZs variable (built-in) we can do just that.
 
