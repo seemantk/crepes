@@ -96,7 +96,7 @@ def parse_command_line_arguments():
     parser = argparse.ArgumentParser(description='process jinja yaml files and assemble into a CloudFormation template')
     parser.add_argument('directory', metavar='dir', type=str, help='source directory')
     parser.add_argument('--region', dest='region', type=str, help='AWS Region')
-    parser.add_argument('--output', dest='outfile', type=str, help='output CloudFormation YAML file')
+    parser.add_argument('--output', dest='outfile', type=str, default='CloudFormation.yml', help='output CloudFormation YAML file')
     parser.add_argument('--import', dest='imports', type=str, help='import existing resources into the stack')
     parser.add_argument('--kwargs', dest='kwargs', nargs='*', action=ParseKwargs, help="list of KEY=value pairs")
 
