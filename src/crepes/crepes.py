@@ -8,12 +8,6 @@ from cfn_tools import load_yaml, dump_yaml, dump_json
 from jinja2 import Template
 
 #
-# Set Global Variables
-#
-imports = {}
-
-
-#
 # Helper functions
 #
 
@@ -27,7 +21,7 @@ def process_jinja_template(filename, kwargs):
     return load_yaml(template.render(**kwargs))
 
 # Assemble all the components of a stack into a single cloudformation::stack object
-def assemble(stack, kwargs, importing=False):
+def assemble(stack, kwargs, imports={}):
     # Create a dictionary to hold all the information
     cfn_stack = { 'AWSTemplateFormatVersion': '2010-09-09' }
 
@@ -54,7 +48,7 @@ def assemble(stack, kwargs, importing=False):
                     print("Flipping %s" % os.path.relpath(os.path.join(dirpath, f), '.'))
 
                     # if this is an import template (rare)
-                    if sec == 'Resources' and importing:
+                    if sec == 'Resources' and imports:
                         # Only import keys specified in the file in arg.imports
                         keys = [key for key in contents.keys() if key in imports.keys()]
                     else:
@@ -115,8 +109,6 @@ def parse_command_line_arguments():
 # Main loop
 #
 def main():
-    global imports
-
     args = parse_command_line_arguments()
 
     # Create the destination dir, if it doesn't exist
@@ -133,16 +125,16 @@ def main():
     kwargs['AZs']     = [z['ZoneName'] for z in zones]
     kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
 
-    if args.imports: # process the ImportedResources file
-        imports = process_jinja_template('ImportedResources.yml', kwargs)
+    imports_template = process_jinja_template('ImportedResources.yml', kwargs) if args.imports else {}
 
     # Assemble the stack into a dict and convert that to yaml
-    stack = assemble(args.directory, kwargs, importing=args.imports)
+    stack = assemble(args.directory, kwargs, imports=imports_template)
 
     if args.imports: # trim the stack based on the ImportedResources
         stack.pop('Outputs', None)
         imports_list = [importify(res, stack['Resources'][res]) for res in stack['Resources']]
 
+        print("Importing Resources")
         print(dump_json(imports_list))
         with open(args.imports, 'w') as f:
             f.write(dump_json(imports_list))
