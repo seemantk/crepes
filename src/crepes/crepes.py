@@ -141,9 +141,7 @@ def main():
 
     formation = dump_yaml(stack)
 
-    if not args.outfile: print(formation)
-    else:
-        with open(args.outfile, 'w') as f: f.write(formation)
+    with open(args.outfile, 'w') as f: f.write(formation)
 
 # Execute if run as a script
 if __name__ == "__main__":
