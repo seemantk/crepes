@@ -129,11 +129,6 @@ def main():
         # Create artifacts for importing resources
         importify.importfiy(stack, args.imports)
 
-        print("Importing Resources")
-        print(dump_json(imports_list))
-        with open(args.imports, 'w') as f:
-            f.write(dump_json(imports_list))
-
     formation = dump_yaml(stack)
 
     with open(args.outfile, 'w') as f: f.write(formation)
