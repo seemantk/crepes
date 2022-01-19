@@ -5,7 +5,7 @@
 import os, boto3
 import argparse
 from cfn_tools import load_yaml, dump_yaml, dump_json
-import importify, templatify
+import importify, jinjify 
 
 
 # Assemble all the components of a stack into a single cloudformation::stack object
@@ -27,7 +27,7 @@ def assemble(stack, kwargs, imports={}):
         for dirpath, dirs, files in os.walk(os.path.join(stack, section)):
             for f in files:
                 # Process each file as a Jinja template first
-                contents = templatify.process_jinja(os.path.join(dirpath, f), kwargs)
+                contents = jinjify.process_template(os.path.join(dirpath, f), kwargs)
                 filename = f.lower()
 
                 if filename.endswith('.yml') or filename.endswith('yaml'):
@@ -103,7 +103,7 @@ def main():
     kwargs = get_aws_metadata(args.region, kwargs=args.kwargs or {})
 
     # If importing the imports template is processed through Jinja, otherwise we get an empty dict
-    imports_template = templatify.process_jinja('ImportedResources.yml', kwargs) if args.imports else {}
+    imports_template = jinjify.process_template('ImportedResources.yml', kwargs) if args.imports else {}
 
     # Assemble the stack into a dict and convert that to YAML 
     # The imports_template variable is {} if not importing

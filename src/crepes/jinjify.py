@@ -6,7 +6,7 @@ from cfn_tools import load_yaml
 from jinja2 import Template
 
 # Read raw YAML file and process as a Jinja template
-def process_jinja(filename, kwargs):
+def process_template(filename, kwargs):
     with open(filename) as f:
         contents = f.read()
 
