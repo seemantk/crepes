@@ -112,7 +112,8 @@ def main():
     args = parse_command_line_arguments()
 
     # Create the destination dir, if it doesn't exist
-    os.makedirs(os.path.dirname(args.outfile) or '.', exist_ok=True)
+    outdir = os.path.dirname(os.path.abspath(args.outfile))
+    os.makedirs(outdir, exist_ok=True)
 
     # Find AWS metadata for this stack deployment
     ec2   = boto3.setup_default_session(region_name=args.region)
