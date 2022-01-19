@@ -112,22 +112,23 @@ def main():
     args = parse_command_line_arguments()
 
     # Create the destination dir, if it doesn't exist
-    os.makedirs(os.path.dirname(args.outfile), exist_ok=True)
+    os.makedirs(os.path.dirname(args.outfile) or '.', exist_ok=True)
 
     # Find AWS metadata for this stack deployment
     ec2   = boto3.setup_default_session(region_name=args.region)
     ec2   = boto3.client('ec2')
     zones = ec2.describe_availability_zones()['AvailabilityZones']
 
-    args.kwargs['REGION']  = args.region
-    args.kwargs['AZs']     = [z['ZoneName'] for z in zones]
-    args.kwargs['AZcodes'] = [z.split('-')[2] for z in args.kwargs['AZs']]
+    kwargs = args.kwargs or {}
+    kwargs['REGION']  = args.region
+    kwargs['AZs']     = [z['ZoneName'] for z in zones]
+    kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
 
     if args.imports: # process the ImportedResources file
-        imports = process_jinja_template('ImportedResources.yml', args.kwargs)
+        imports = process_jinja_template('ImportedResources.yml', kwargs)
 
     # Assemble the stack into a dict and convert that to yaml
-    stack = assemble(args.directory, args.kwargs, importing=args.imports)
+    stack = assemble(args.directory, kwargs, importing=args.imports)
 
     if args.imports: # trim the stack based on the ImportedResources
         stack.pop('Outputs', None)
