@@ -30,19 +30,6 @@ def parse_command_line_arguments():
     return parser.parse_args()
 
 
-def get_aws_metadata(region, kwargs={}):
-    # Retrieve info about the specified AWS region
-    ec2   = boto3.setup_default_session(region_name=region)
-    ec2   = boto3.client('ec2')
-    zones = ec2.describe_availability_zones()['AvailabilityZones']
-
-    kwargs['REGION']  = region
-    kwargs['AZs']     = [z['ZoneName'] for z in zones]
-    kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
-
-    return kwargs
-
-
 #
 # Main loop
 #
@@ -53,10 +40,8 @@ def main():
     outdir = os.path.dirname(os.path.abspath(args.outfile))
     os.makedirs(outdir, exist_ok=True)
 
-    kwargs = get_aws_metadata(args.region, kwargs=args.kwargs or {})
-
     # Assemble the stack into a dict and convert that to YAML 
-    stack = stackify.assemble(args.directory, kwargs, imports=args.imports)
+    stack = stackify.assemble(args.directory, args.region, args.kwargs or {}, imports=args.imports)
 
     if args.imports:
         # Create artifacts for importing resources
