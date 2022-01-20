@@ -2,7 +2,7 @@
 
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
-import os, boto3
+import os
 import argparse
 from cfn_tools import dump_yaml
 import importify, stackify
