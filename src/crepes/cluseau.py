@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright (c) 2020-2021 Seemant Kulleen <seemantk@gmail.com>
 
 # TODO:

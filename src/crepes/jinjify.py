@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
 from cfn_tools import load_yaml
