@@ -43,13 +43,9 @@ def main():
     # Assemble the stack into a dict and convert that to YAML 
     stack = stackify.assemble(args.directory, args.region, args.kwargs or {}, imports=args.imports)
 
-    if args.imports:
-        # Create artifacts for importing resources
-        importify.importfiy(stack, args.imports)
+    # Output the stack file and the import resources list file (if any)
+    stackify.create_stack_files(stack, args.imports, args.outfile)
 
-    formation = dump_yaml(stack)
-
-    with open(args.outfile, 'w') as f: f.write(formation)
 
 # Execute if run as a script
 if __name__ == "__main__":

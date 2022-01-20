@@ -19,6 +19,16 @@ def _get_aws_metadata(region, kwargs={}):
 
     return kwargs
 
+# Output the stack file and, if importing, the imports list file
+def create_stack_files(stack, imports, outfile):
+    if imports:
+        # Write out the imports list file
+        importify.importfiy(stack, imports)
+
+    with open(args.outfile, 'w') as f:
+        # Convert the stack into a YAML object and write it to a file
+        f.write(dump_yaml(stack))
+
 
 # Assemble all the components of a stack into a single CloudFormation::Stack object
 def assemble(stack, region, args, imports):
