@@ -73,10 +73,6 @@ def main():
     args = parse_command_line_arguments()
 
     if args.command == 'stack':
-        # Create the destination dir, if it doesn't exist
-        outdir = os.path.dirname(os.path.abspath(args.outfile))
-        os.makedirs(outdir, exist_ok=True)
-
         stackify.stackify(args.directory, args.region, args.outfile, args.kwargs or {}, args.imports)
 
     elif args.command == 'unstack':

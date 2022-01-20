@@ -9,6 +9,10 @@ import importify, jinjify
 
 
 def stackify(directory, region, outfile, kwargs, imports):
+    # Create the destination dir, if it doesn't exist
+    outdir = os.path.dirname(os.path.abspath(outfile))
+    os.makedirs(outdir, exist_ok=True)
+
     # Assemble the stack into a dict
     stack = assemble(directory, region, kwargs, imports)
 
