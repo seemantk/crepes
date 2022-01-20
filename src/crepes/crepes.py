@@ -1,11 +1,11 @@
-#!/usr/bin/env python3templatify.
+#!/usr/bin/env python3
 
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
 import os, boto3
 import argparse
-from cfn_tools import load_yaml, dump_yaml, dump_json
-import importify, jinjify, stackify
+from cfn_tools import dump_yaml
+import importify, stackify
 
 
 def parse_command_line_arguments():
@@ -55,17 +55,10 @@ def main():
 
     kwargs = get_aws_metadata(args.region, kwargs=args.kwargs or {})
 
-    # If importing the imports template is processed through Jinja, otherwise we get an empty dict
-    imports_template = jinjify.process_template('ImportedResources.yml', kwargs) if args.imports else {}
-
     # Assemble the stack into a dict and convert that to YAML 
-    # The imports_template variable is {} if not importing
-    stack = stackify.assemble(args.directory, kwargs, imports=imports_template)
+    stack = stackify.assemble(args.directory, kwargs, imports=args.imports)
 
     if args.imports:
-        # Import template is not allowed to have an Outputs section
-        stack.pop('Outputs', None)
-
         # Create artifacts for importing resources
         importify.importfiy(stack, args.imports)
 

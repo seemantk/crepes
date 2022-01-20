@@ -16,6 +16,10 @@ def assemble(stack, kwargs, imports={}):
     sections = [l for l in os.listdir(stack) if l.startswith('0')]
     sections.sort()
 
+    # If importing, process the ImportedResources yaml document
+    if imports:
+        import_filter = jinjify.process_template('ImportedResources.yml', kwargs)
+
     for section in sections:
         sec = section.split('_')[1]
 
@@ -36,7 +40,7 @@ def assemble(stack, kwargs, imports={}):
                     # if this is an import template (rare)
                     if sec == 'Resources' and imports:
                         # Only import keys specified in the imported resources file
-                        keys = [key for key in contents.keys() if key in imports.keys()]
+                        keys = [key for key in contents.keys() if key in import_filter.keys()]
                     else:
                         keys = contents.keys()
 
