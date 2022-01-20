@@ -7,12 +7,10 @@ from cfn_tools import dump_json
 def importify(stack, outfile):
     # Create list of resources. This is required when using the AWS CLI to deploy CloudFormation stacks
     # The command is `aws create-changeset --resources-to-import file://{outfile}`
-    imports = dump_json([_create_res_list(res, stack['Resources'][res]) for res in stack['Resources']])
+    imports = [_create_res_list_item(res, stack['Resources'][res]) for res in stack['Resources']]
 
-    print("Resources being imported")
-    print(imports)
     with open(outfile, 'w') as f:
-        f.write(imports)
+        f.write(dump_json(imports))
 
 
 # Internal Helper function which creates items for a resource list, as required if using the awscli
