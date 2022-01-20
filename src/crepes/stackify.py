@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env/python3
 
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
@@ -19,18 +19,6 @@ def stackify(directory, region, outfile, kwargs, imports):
     # Output the stack file and the import resources list file (if any)
     create_stack_files(stack, imports, outfile)
 
-def _get_aws_metadata(region, kwargs={}):
-    # Retrieve info about the specified AWS region
-    ec2   = boto3.setup_default_session(region_name=region)
-    ec2   = boto3.client('ec2')
-    zones = ec2.describe_availability_zones()['AvailabilityZones']
-
-    kwargs['REGION']  = region
-    kwargs['AZs']     = [z['ZoneName'] for z in zones]
-    kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
-
-    return kwargs
-
 # Output the stack file and, if importing, the imports list file
 def create_stack_files(stack, imports, outfile):
     if imports:
@@ -44,7 +32,6 @@ def create_stack_files(stack, imports, outfile):
 
 # Assemble all the components of a stack into a single CloudFormation::Stack object
 def assemble(stack, region, args, imports):
-
     kwargs = _get_aws_metadata(region, args)
 
     # Create a dictionary to hold all the information
@@ -98,3 +85,15 @@ def assemble(stack, region, args, imports):
     if imports: cfn_stack.pop('Outputs', None)
 
     return {k: v for k, v in cfn_stack.items() if v} # discard null/empty keys
+
+def _get_aws_metadata(region, kwargs={}):
+    # Retrieve info about the specified AWS region
+    ec2   = boto3.setup_default_session(region_name=region)
+    ec2   = boto3.client('ec2')
+    zones = ec2.describe_availability_zones()['AvailabilityZones']
+
+    kwargs['REGION']  = region
+    kwargs['AZs']     = [z['ZoneName'] for z in zones]
+    kwargs['AZcodes'] = [z.split('-')[2] for z in kwargs['AZs']]
+
+    return kwargs
