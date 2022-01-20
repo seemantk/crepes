@@ -35,5 +35,5 @@ crepes.py stack --region $REGION --output CloudFormation.yml /directory/of/decon
 
 To deconstruct a CloudFormation template into a directory structure:
 ```
-cluseau.py unstack --source CloudFormation.yml /directory/for/deconstructed-template
+crepes.py unstack --source CloudFormation.yml /directory/for/deconstructed-template
 ```
