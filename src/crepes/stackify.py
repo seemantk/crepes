@@ -4,7 +4,7 @@
 
 import os
 import boto3
-from cfn_tools import load_yaml, dump_yaml, dump_json
+from cfn_tools import dump_yaml
 import importify, jinjify
 
 def _get_aws_metadata(region, kwargs={}):
