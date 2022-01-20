@@ -3,7 +3,7 @@
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
 import os, argparse
-import stackify
+import stackify, cluseau
 
 def parse_command_line_arguments():
     # Helper to parse keyword arguments for Jinja variables
@@ -27,9 +27,10 @@ def parse_command_line_arguments():
     # Common arguments
     parser.add_argument(
         'directory',
-        help='source directory',
+        help='source directory (Crepes) or destination directory (Cluseau)',
         metavar='dir', type=str
     )
+
     # Crepes arguments
     crepes.add_argument(
         '--region',
@@ -54,6 +55,13 @@ def parse_command_line_arguments():
         action=ParseKwargs
     )
 
+    # Cluseau arguments
+    cluseau.add_argument(
+        '--source',
+        help='source CloudFormation template',
+        dest='template', type=str
+    )
+
     # return the parsed command line arguments
     return parser.parse_args()
 
@@ -74,6 +82,8 @@ def main():
 
         # Output the stack file and the import resources list file (if any)
         stackify.create_stack_files(stack, args.imports, args.outfile)
+    elif args.command == 'unstack':
+        cluseau.cluseau(args.template, args.directory)
 
 
 # Execute if run as a script
