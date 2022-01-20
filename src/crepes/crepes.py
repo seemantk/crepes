@@ -77,11 +77,8 @@ def main():
         outdir = os.path.dirname(os.path.abspath(args.outfile))
         os.makedirs(outdir, exist_ok=True)
 
-        # Assemble the stack into a dict and convert that to YAML 
-        stack = stackify.assemble(args.directory, args.region, args.kwargs or {}, args.imports)
+        stackify.stackify(args.directory, args.region, args.outfile, args.kwargs or {}, args.imports)
 
-        # Output the stack file and the import resources list file (if any)
-        stackify.create_stack_files(stack, args.imports, args.outfile)
     elif args.command == 'unstack':
         cluseau.cluseau(args.template, args.directory)
 

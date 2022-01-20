@@ -7,6 +7,14 @@ import boto3
 from cfn_tools import dump_yaml
 import importify, jinjify
 
+
+def stackify(directory, region, outfile, kwargs, imports):
+    # Assemble the stack into a dict
+    stack = assemble(directory, region, kwargs, imports)
+
+    # Output the stack file and the import resources list file (if any)
+    create_stack_files(stack, imports, outfile)
+
 def _get_aws_metadata(region, kwargs={}):
     # Retrieve info about the specified AWS region
     ec2   = boto3.setup_default_session(region_name=region)
