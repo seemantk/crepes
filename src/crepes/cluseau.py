@@ -59,11 +59,17 @@ def process_resources(secdir, resources, destdir):
         # Grab the AWS resource type (e.g. AWS::EC2::LaunchInstance)
         resource = resources[resname]
         resource_type = resource['Type'].split('::')
+        # Bring the 'AWS' part to the front
         resource_type.reverse()
         # Discard the 'AWS' part
         resource_type.pop()
+        # Re-reverse the string to make it normal again
         resource_type.reverse()
+
+        # Construct the directory name, e.g. /<destdir>/07_Resources/EC2/
         dirname = os.sep.join([destdir, secdir, os.sep.join(resource_type)])
+
+        # Construct the filename, e.g. LaunchInstance.yml
         filename = '.'.join([resname, 'yml'])
 
         # Create a directory named for each resource type
