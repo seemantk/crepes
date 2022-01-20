@@ -25,7 +25,7 @@ def create_stack_files(stack, imports, outfile):
         # Write out the imports list file
         importify.importfiy(stack, imports)
 
-    with open(args.outfile, 'w') as f:
+    with open(outfile, 'w') as f:
         # Convert the stack into a YAML object and write it to a file
         f.write(dump_yaml(stack))
 
