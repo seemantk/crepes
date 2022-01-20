@@ -19,28 +19,35 @@ def parse_command_line_arguments():
     parser = argparse.ArgumentParser(
         description='process jinja YAML files and assemble into a CloudFormation template'
     )
+
+    subparser = parser.add_subparsers(dest='command')
+    crepes = subparser.add_parser('stack')
+    cluseau = subparser.add_parser('unstack')
+
+    # Common arguments
     parser.add_argument(
         'directory',
         help='source directory',
         metavar='dir', type=str
     )
-    parser.add_argument(
+    # Crepes arguments
+    crepes.add_argument(
         '--region',
         help='AWS Region',
         dest='region', type=str
     )
-    parser.add_argument(
+    crepes.add_argument(
         '--output',
         help='output CloudFormation YAML file',
         dest='outfile', type=str,
         default='CloudFormation.yml'
     )
-    parser.add_argument(
+    crepes.add_argument(
         '--import',
         help='name of file to output the resources list',
         dest='imports', type=str
     )
-    parser.add_argument(
+    crepes.add_argument(
         '--kwargs',
         help="list of KEY=value pairs",
         dest='kwargs', nargs='*',
@@ -57,15 +64,16 @@ def parse_command_line_arguments():
 def main():
     args = parse_command_line_arguments()
 
-    # Create the destination dir, if it doesn't exist
-    outdir = os.path.dirname(os.path.abspath(args.outfile))
-    os.makedirs(outdir, exist_ok=True)
+    if args.command == 'stack':
+        # Create the destination dir, if it doesn't exist
+        outdir = os.path.dirname(os.path.abspath(args.outfile))
+        os.makedirs(outdir, exist_ok=True)
 
-    # Assemble the stack into a dict and convert that to YAML 
-    stack = stackify.assemble(args.directory, args.region, args.kwargs or {}, args.imports)
+        # Assemble the stack into a dict and convert that to YAML 
+        stack = stackify.assemble(args.directory, args.region, args.kwargs or {}, args.imports)
 
-    # Output the stack file and the import resources list file (if any)
-    stackify.create_stack_files(stack, args.imports, args.outfile)
+        # Output the stack file and the import resources list file (if any)
+        stackify.create_stack_files(stack, args.imports, args.outfile)
 
 
 # Execute if run as a script
