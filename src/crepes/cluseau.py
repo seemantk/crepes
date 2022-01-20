@@ -7,9 +7,8 @@
 
 
 
-import os, sys
-import argparse
-from cfn_tools import load_yaml, dump_json, dump_yaml
+import os
+from cfn_tools import load_yaml, dump_yaml
 
 # Constants
 SECTIONS = ['Description', 'Metadata', 'Parameters', 'Mappings','Conditions', 'Transform', 'Resources', 'Outputs']
@@ -67,11 +66,8 @@ def process_resources(secdir, resources, destdir):
         dirname = os.sep.join([destdir, secdir, os.sep.join(resource_type)])
         filename = '.'.join([resname, 'yml'])
 
-        # put each resource into a directory nmed for its type
-        try:
-            os.makedirs(dirname)
-        except FileExistsError:
-            pass
+        # Create a directory named for each resource type
+        os.makedirs(dirname, exist_ok=True)
 
         # Write out the object into its own file
         with open(os.path.join(dirname, filename), 'w') as f:
