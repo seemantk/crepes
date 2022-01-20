@@ -3,6 +3,7 @@
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
 import os
+import boto3
 from cfn_tools import load_yaml, dump_yaml, dump_json
 import importify, jinjify
 
