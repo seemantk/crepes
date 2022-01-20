@@ -26,35 +26,26 @@ def cluseau(template, destdir):
     # Create the section directories if they don't exist
     for i, section in enumerate(SECTIONS, start=1):
         # Create a directory for the section of the template, e.g 01_Description/
-        secdir = '_'.join([str(i).zfill(2), section])
+        secdir = '{}_{}'.format(str(i).zfill(2), section)
 
         try:
             os.makedirs(os.path.join(destdir, secdir), exist_ok=True)
 
-            if(i == 1): # Write out the description file
-                if template: # Create a description placeholder
-                    process_description(secdir, current[section], destdir)
-                else:
-                    process_description(secdir, 'Description of the stack goes here.', destdir)
-
-            elif(i == 7): # Process the AWS Resources
-                if template:
-                    process_resources(secdir, current[section], destdir)
+            if template:
+                process_section(secdir, section, current[section], destdir)
             else:
-                if template:
-                    process_section(secdir, section, current[section], destdir)
+                if(section == 'Description'):
+                    process_description('Description of the stack goes here.',secdir, destdir)
         except KeyError:
             continue
 
 # Helper Functions
-def process_description(secdir, description, destdir):
-    print("processing %s" % secdir)
+def process_description(description, secdir, destdir):
     with open(os.path.join(destdir, secdir, 'description.txt'), 'w') as f:
         f.write(description)
 
 
-def process_resources(secdir, resources, destdir):
-    print("processing %s" % secdir)
+def process_resources(resources, secdir, destdir):
     for resname in resources:
         # Grab the AWS resource type (e.g. AWS::EC2::LaunchInstance)
         resource = resources[resname]
@@ -83,9 +74,14 @@ def process_resources(secdir, resources, destdir):
 
 def process_section(secdir, section, content, destdir):
     print("processing %s" % secdir)
-    destfile = os.path.join(destdir, secdir, '%s.yml' % section.lower())
-    with open(destfile, 'w') as f:
-        f.write(dump_yaml(content))
+    if(section == 'Description'): # Write out the description file
+        process_description(content, secdir , destdir)
+    elif(section == 'Resources'):
+        process_resources(content, secdir, destdir)
+    else:
+        destfile = os.path.join(destdir, secdir, '%s.yml' % section.lower())
+        with open(destfile, 'w') as f:
+            f.write(dump_yaml(content))
 
 
 if __name__ == "__main__":
