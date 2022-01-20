@@ -2,7 +2,7 @@
 
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
-import os, argparse
+import argparse
 import stackify, cluseau
 
 def parse_command_line_arguments():
