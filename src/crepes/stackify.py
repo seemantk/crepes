@@ -6,7 +6,7 @@ import os
 from cfn_tools import load_yaml, dump_yaml, dump_json
 import importify, jinjify
 
-def get_aws_metadata(region, kwargs={}):
+def _get_aws_metadata(region, kwargs={}):
     # Retrieve info about the specified AWS region
     ec2   = boto3.setup_default_session(region_name=region)
     ec2   = boto3.client('ec2')
@@ -22,7 +22,7 @@ def get_aws_metadata(region, kwargs={}):
 # Assemble all the components of a stack into a single cloudformation::stack object
 def assemble(stack, region, args, imports={}):
 
-    kwargs = get_aws_metadata(args.region, kwargs=args.kwargs or {})
+    kwargs = _get_aws_metadata(region, args)
 
     # Create a dictionary to hold all the information
     cfn_stack = { 'AWSTemplateFormatVersion': '2010-09-09' }
