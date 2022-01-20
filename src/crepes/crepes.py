@@ -2,11 +2,8 @@
 
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
-import os
-import argparse
-from cfn_tools import dump_yaml
-import importify, stackify
-
+import os, argparse
+import stackify
 
 def parse_command_line_arguments():
     # Helper to parse keyword arguments for Jinja variables
