@@ -25,7 +25,7 @@ def cluseau(template, destdir):
     # Create the section directories if they don't exist
     for i, section in enumerate(SECTIONS, start=1):
         # Create a directory for the section of the template, e.g 01_Description/
-        secdir = '{}_{}'.format(str(i).zfill(2), section)
+        secdir = f'{format(str(i).zfill(2))}_{section}'
 
         try:
             os.makedirs(os.path.join(destdir, secdir), exist_ok=True)
