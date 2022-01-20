@@ -25,15 +25,15 @@ Use your package manager or homebrew or pip.
 ## Usage
 To initialize an empty directory structure, ready to populate with yaml files:
 ```
-cluseau.py /destination/path/to/deconstructed-template
+crepes.py unstack /destination/path/to/deconstructed-template
 ```
 
 To construct a CloudFormation template ready to deploy to AWS:
 ```
-crepes.py --region $REGION --output CloudFormation.yml /directory/of/deconstructed-template
+crepes.py stack --region $REGION --output CloudFormation.yml /directory/of/deconstructed-template
 ```
 
 To deconstruct a CloudFormation template into a directory structure:
 ```
-cluseau.py --source CloudFormation.yml /directory/for/deconstructed-template
+crepes.py unstack --source CloudFormation.yml /directory/for/deconstructed-template
 ```
