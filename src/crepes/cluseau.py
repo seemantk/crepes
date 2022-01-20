@@ -49,11 +49,13 @@ def cluseau(template, destdir):
 
 # Helper Functions
 def process_description(secdir, description, destdir):
+    print("processing %s" % secdir)
     with open(os.path.join(destdir, secdir, 'description.txt'), 'w') as f:
         f.write(description)
 
 
 def process_resources(secdir, resources, destdir):
+    print("processing %s" % secdir)
     for resname in resources:
         # Grab the AWS resource type (e.g. AWS::EC2::LaunchInstance)
         resource = resources[resname]
