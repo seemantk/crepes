@@ -16,12 +16,36 @@ def parse_command_line_arguments():
 
 
     # Available command line arguments and their defaults
-    parser = argparse.ArgumentParser(description='process jinja YAML files and assemble into a CloudFormation template')
-    parser.add_argument('directory', metavar='dir', type=str, help='source directory')
-    parser.add_argument('--region', dest='region', type=str, help='AWS Region')
-    parser.add_argument('--output', dest='outfile', type=str, default='CloudFormation.yml', help='output CloudFormation YAML file')
-    parser.add_argument('--import', dest='imports', type=str, help='name of file to output the resources list')
-    parser.add_argument('--kwargs', dest='kwargs', nargs='*', action=ParseKwargs, help="list of KEY=value pairs")
+    parser = argparse.ArgumentParser(
+        description='process jinja YAML files and assemble into a CloudFormation template'
+    )
+    parser.add_argument(
+        'directory',
+        help='source directory',
+        metavar='dir', type=str
+    )
+    parser.add_argument(
+        '--region',
+        help='AWS Region',
+        dest='region', type=str
+    )
+    parser.add_argument(
+        '--output',
+        help='output CloudFormation YAML file',
+        dest='outfile', type=str,
+        default='CloudFormation.yml'
+    )
+    parser.add_argument(
+        '--import',
+        help='name of file to output the resources list',
+        dest='imports', type=str
+    )
+    parser.add_argument(
+        '--kwargs',
+        help="list of KEY=value pairs",
+        dest='kwargs', nargs='*',
+        action=ParseKwargs
+    )
 
     # return the parsed command line arguments
     return parser.parse_args()
