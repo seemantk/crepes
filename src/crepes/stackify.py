@@ -19,8 +19,8 @@ def _get_aws_metadata(region, kwargs={}):
     return kwargs
 
 
-# Assemble all the components of a stack into a single cloudformation::stack object
-def assemble(stack, region, args, imports={}):
+# Assemble all the components of a stack into a single CloudFormation::Stack object
+def assemble(stack, region, args, imports):
 
     kwargs = _get_aws_metadata(region, args)
 
