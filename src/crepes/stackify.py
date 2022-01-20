@@ -21,7 +21,7 @@ def stackify(directory, region, outfile, kwargs, imports):
 def create_stack_files(stack, imports, outfile):
     if imports:
         # Write out the imports list file
-        importify.importfiy(stack, imports)
+        importify.importify(stack, imports)
 
     with open(outfile, 'w') as f:
         # Convert the stack into a YAML object and write it to a file
