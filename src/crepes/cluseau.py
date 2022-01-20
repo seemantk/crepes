@@ -19,7 +19,7 @@ SECTIONS = ['Description', 'Metadata', 'Parameters', 'Mappings','Conditions', 'T
 #
 def cluseau(template, destdir):
     if template:
-        # Read the introspected CloudFormer template
+        # Read a YAML CloudFormation template
         with open(template) as f:
             current = load_yaml(f)
 
@@ -83,8 +83,9 @@ def process_resources(secdir, resources, destdir):
 
 def process_section(secdir, section, content, destdir):
     print("processing %s" % secdir)
-    with open(os.path.join(destdir, secdir, '%s.yml' % section.lower()), 'w') as f:
-        f.write(dump_yaml({'%s' % content}))
+    destfile = os.path.join(destdir, secdir, '%s.yml' % section.lower())
+    with open(destfile, 'w') as f:
+        f.write(dump_yaml(content))
 
 
 if __name__ == "__main__":
