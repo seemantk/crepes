@@ -1,7 +1,7 @@
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
 import argparse
-import stackify, cluseau
+import _stackify, _cluseau
 
 def parse_command_line_arguments():
     # Helper to parse keyword arguments for Jinja variables
@@ -71,10 +71,10 @@ def main():
     args = parse_command_line_arguments()
 
     if args.command == 'stack':
-        stackify.stackify(args.directory, args.region, args.outfile, args.kwargs or {}, args.imports)
+        _stackify.stackify(args.directory, args.region, args.outfile, args.kwargs or {}, args.imports)
 
     elif args.command == 'unstack':
-        cluseau.cluseau(args.template, args.directory)
+        _cluseau.cluseau(args.template, args.directory)
 
 
 # Execute if run as a script

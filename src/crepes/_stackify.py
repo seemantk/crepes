@@ -3,7 +3,7 @@
 import os
 import boto3
 from cfn_tools import dump_yaml
-import importify, jinjify
+import _importify, _jinjify
 
 
 def stackify(directory, region, outfile, kwargs, imports):
