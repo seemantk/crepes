@@ -3,7 +3,7 @@
 import argparse
 import _stackify, _cluseau
 
-def parse_command_line_arguments():
+def _parse_command_line_arguments():
     # Helper to parse keyword arguments for Jinja variables
     class ParseKwargs(argparse.Action):
         def __call__(self, parser, namespace, values, option_string=None):
@@ -25,7 +25,7 @@ def parse_command_line_arguments():
     # Common arguments
     parser.add_argument(
         'directory',
-        help='source directory (Crepes) or destination directory (Cluseau)',
+        help='source directory (Stack) or destination directory (Unstack)',
         metavar='dir', type=str
     )
 
@@ -68,7 +68,7 @@ def parse_command_line_arguments():
 # Main loop
 #
 def main():
-    args = parse_command_line_arguments()
+    args = _parse_command_line_arguments()
 
     if args.command == 'stack':
         _stackify.stackify(args.directory, args.region, args.outfile, args.kwargs or {}, args.imports)
