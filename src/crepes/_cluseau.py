@@ -31,20 +31,20 @@ def cluseau(template, destdir):
             os.makedirs(os.path.join(destdir, secdir), exist_ok=True)
 
             if template:
-                process_section(secdir, section, current[section], destdir)
+                _process_section(secdir, section, current[section], destdir)
             else:
                 if(section == 'Description'):
-                    process_description('Description of the stack goes here.',secdir, destdir)
+                    _process_description('Description of the stack goes here.',secdir, destdir)
         except KeyError:
             continue
 
 # Helper Functions
-def process_description(description, secdir, destdir):
+def _process_description(description, secdir, destdir):
     with open(os.path.join(destdir, secdir, 'description.txt'), 'w') as f:
         f.write(description)
 
 
-def process_resources(resources, secdir, destdir):
+def _process_resources(resources, secdir, destdir):
     for resname in resources:
         # Grab the AWS resource type (e.g. AWS::EC2::LaunchInstance)
         resource = resources[resname]
@@ -71,12 +71,12 @@ def process_resources(resources, secdir, destdir):
 
 
 
-def process_section(secdir, section, content, destdir):
+def _process_section(secdir, section, content, destdir):
     print("processing %s" % secdir)
     if(section == 'Description'): # Write out the description file
-        process_description(content, secdir , destdir)
+        _process_description(content, secdir , destdir)
     elif(section == 'Resources'):
-        process_resources(content, secdir, destdir)
+        _process_resources(content, secdir, destdir)
     else:
         destfile = os.path.join(destdir, secdir, '%s.yml' % section.lower())
         with open(destfile, 'w') as f:
