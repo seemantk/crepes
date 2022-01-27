@@ -12,13 +12,13 @@ def stackify(directory, region, outfile, kwargs, imports):
     os.makedirs(outdir, exist_ok=True)
 
     # Assemble the stack into a dict
-    stack = assemble(directory, region, kwargs, imports)
+    stack = _assemble(directory, region, kwargs, imports)
 
     # Output the stack file and the import resources list file (if any)
-    create_stack_files(stack, imports, outfile)
+    _create_stack_files(stack, imports, outfile)
 
 # Output the stack file and, if importing, the imports list file
-def create_stack_files(stack, imports, outfile):
+def _create_stack_files(stack, imports, outfile):
     if imports:
         # Write out the imports list file
         importify.importify(stack, imports)
@@ -29,7 +29,7 @@ def create_stack_files(stack, imports, outfile):
 
 
 # Assemble all the components of a stack into a single CloudFormation::Stack object
-def assemble(stack, region, args, imports):
+def _assemble(stack, region, args, imports):
     kwargs = _get_aws_metadata(region, args)
 
     # Create a dictionary to hold all the information
