@@ -14,7 +14,7 @@ Regarding the name: I find YAML to be much easier and less cluttered than JSON. 
 
 
 ## Installation
-### Requirements
+### Dependencies/Requirements
 
 Use your package manager or homebrew or pip.
 
@@ -22,18 +22,28 @@ Use your package manager or homebrew or pip.
 * install [jinja2](https://pypi.org/project/Jinja2/)
 * install [cfn-flip](https://github.com/awslabs/aws-cfn-template-flip)
 
+### Install Crepes
+run:
+```python setup.py install```
+
+
 ## Usage
-To initialize an empty directory structure, ready to populate with yaml files:
+Initialize an empty directory structure, ready to populate with yaml files:
 ```
 crepes.py unstack /destination/path/to/deconstructed-template
 ```
 
-To construct a CloudFormation template ready to deploy to AWS:
+Deconstruct a CloudFormation template into a directory structure:
+```
+crepes.py unstack --source CloudFormation.yml /directory/for/deconstructed-template
+```
+
+Stack a directory of YAML files into a CloudFormation template ready to deploy to AWS:
 ```
 crepes.py stack --region $REGION --output CloudFormation.yml /directory/of/deconstructed-template
 ```
 
-To deconstruct a CloudFormation template into a directory structure:
-```
-crepes.py unstack --source CloudFormation.yml /directory/for/deconstructed-template
-```
+### Walkthrough
+
+
+
