@@ -70,6 +70,20 @@ def _process_resources(resources, secdir, destdir):
             f.write(dump_yaml({'%s' % resname: resource}))
 
 
+def _process_paramappings(paramappings, secdir, destdir):
+    # Construct the directory name, e.g. /<destdir>/03_Params/ or /<destdir>/04_Mappings
+    dirname = os.sep.join([destdir, secdir])
+
+    for item in paramappings:
+        map_or_param = paramappings[item]
+
+        # Construct the filename based on the param or mapping name
+        filename = '.'.join([item, 'yml'])
+
+        # Write out the object into its own file
+        with open(os.path.join(dirname, filename), 'w') as f:
+            f.write(dump_yaml({'%s' % item: map_or_param}))
+
 
 def _process_section(secdir, section, content, destdir):
     print("processing %s" % secdir)
@@ -77,6 +91,8 @@ def _process_section(secdir, section, content, destdir):
         _process_description(content, secdir , destdir)
     elif(section == 'Resources'):
         _process_resources(content, secdir, destdir)
+    elif(section == 'Parameters' or section == 'Mappings'):
+        _process_paramappings(content, secdir, destdir)
     else:
         destfile = os.path.join(destdir, secdir, '%s.yml' % section.lower())
         with open(destfile, 'w') as f:
