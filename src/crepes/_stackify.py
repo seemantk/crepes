@@ -41,7 +41,7 @@ def _assemble(stack, region, args, imports):
 
     # If importing, process the ImportedResources yaml document
     if imports:
-        import_filter = jinjify.process_template('ImportedResources.yml', kwargs)
+        import_filter = _jinjify.process_template('ImportedResources.yml', kwargs)
 
     for section in sections:
         sec = section.split('_')[1]
@@ -53,7 +53,7 @@ def _assemble(stack, region, args, imports):
         for dirpath, dirs, files in os.walk(os.path.join(stack, section)):
             for f in files:
                 # Process each file as a Jinja template first
-                contents = jinjify.process_template(os.path.join(dirpath, f), kwargs)
+                contents = _jinjify.process_template(os.path.join(dirpath, f), kwargs)
                 filename = f.lower()
 
                 if filename.endswith('.yml') or filename.endswith('yaml'):
