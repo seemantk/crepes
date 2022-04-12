@@ -20,7 +20,7 @@ def _parse_command_line_arguments():
 
     subparser = parser.add_subparsers(dest='command')
     crepes = subparser.add_parser('stack')
-    cluseau = subparser.add_parser('unstack')
+    cluseau = subparser.add_parser('spread')
 
     # Common arguments
     parser.add_argument(
@@ -73,7 +73,7 @@ def main():
     if args.command == 'stack':
         _stackify.stackify(args.directory, args.region, args.outfile, args.kwargs or {}, args.imports)
 
-    elif args.command == 'unstack':
+    elif args.command == 'spread':
         _cluseau.cluseau(args.template, args.directory)
 
 
