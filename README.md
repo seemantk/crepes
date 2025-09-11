@@ -72,7 +72,7 @@ own file, making it easy to manage and version control.
 When you use crepes, it creates a directory structure like this:
 
 
-
+```
 template-directory/
 ├── Description.yaml
 ├── Metadata.yaml
@@ -85,7 +85,7 @@ template-directory/
 │   ├── s3-bucket.yaml
 │   └── vpc.yaml
 └── Outputs.yaml
-
+```
 
 Each file contains the corresponding CloudFormation section content in YAML format.
 
@@ -95,77 +95,85 @@ Each component of a CloudFormation template can be stored in its own YAML file:
 
 ##### Description
 The Description file contains the template description:
+```
 Description: "My CloudFormation template description"
+```
 
 
 ##### Metadata
 The Metadata file contains metadata about the template:
 
+```
 Metadata:
   AWS::CloudFormation::Designer:
     Group: MyGroup
-
+```
 
 ##### Parameters
 The Parameters file contains parameter definitions:
 
+```
 Parameters:
   InstanceType:
     Type: String
     Default: t2.micro
     Description: EC2 instance type
-
+```
 
 #####  Mappings
 
 The Mappings file contains mapping definitions:
 
-
+```
 Mappings:
   RegionMap:
     us-east-1:
       AMI: ami-12345678
     us-west-2:
       AMI: ami-87654321
+```
+
 
 ##### Conditions
 The Conditions file contains condition definitions:
 
-
-
+```
 Conditions:
   IsUsEast1: !Equals [!Ref "AWS::Region", "us-east-1"]
-
+```
 
 ##### Transform
 
 The Transform file contains transform definitions:
 
+```
 Transform: AWS::Include
-
+```
 
 ##### Resources
 
 The Resources directory contains individual resource files:
 
-"# Resources/ec2-instance.yaml
+```
+# Resources/ec2-instance.yaml
 Resources:
   MyEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
       InstanceType: !Ref InstanceType
-
+```
 
 ##### Outputs
 
 The Outputs file contains output definitions:
 
+```
 Outputs:
   InstanceId:
     Description: Instance ID of the newly created EC2 instance
     Value: !Ref MyEC2Instance
-
+```
 
 
 ##### Jinja Variables
@@ -183,64 +191,51 @@ Crepes provides built-in variables that can be used in templates:
 
 You can pass custom variables to crepes:
 
+```
 crepes.py stack --region us-east-1 --output template.yaml --var environment=production --var
 version=1.0 /path/to/template
+```
 
 
-Example Usage
+##### Example Usage
 
-
-
+```
 # Resources/ec2-instance.yaml
-
 Resources:
-
   MyEC2Instance:
-
     Type: AWS::EC2::Instance
-
     Properties:
-
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
-
       InstanceType: !Ref InstanceType
-
       Tags:
-
         - Key: Environment
-
           Value: "{{ environment }}"
-
         - Key: Version
-
           Value: "{{ version }}"
+```
 
 
+### Examples
 
-Examples
-
-Simple Example
-
+#### Simple Example
 Create a basic template structure:
 
 
-
+```
 mkdir my-template
-
 cd my-template
-
 crepes.py unstack .
+```
 
 
-Complex Example with Variables
+#### Complex Example with Variables
 
 Create a template that uses region-specific configurations:
 
-
-
+```
 crepes.py stack --region us-east-1 --output template.yaml --var environment=production --var
 version=1.0 /path/to/template
-
+```
 
 
 ### Advanced Features
@@ -249,19 +244,21 @@ version=1.0 /path/to/template
 
 Crepes supports importing other templates:
 
-"# Resources/imported-resources.yaml"
+```
+# Resources/imported-resources.yaml
 Resources:
   ImportedResource:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateUrl: https://s3.amazonaws.com/bucket/template.yaml
-
+```
 
 #### Conditional Resources
 
 Use conditions to create resources only in specific regions:
 
-"# Resources/conditional-resources.yaml"
+```
+# Resources/conditional-resources.yaml
 Conditions:
   IsUsEast1: !Equals [!Ref "AWS::Region", "us-east-1"]
 
@@ -272,26 +269,22 @@ Resources:
     Properties:
       ImageId: ami-12345678
       InstanceType: t2.micro
-
+```
 
 #### Multi-Region Deployment
 
 Deploy the same template to multiple regions:
 
-
-
+```
 for region in us-east-1 us-west-2 eu-west-1; do
-
   crepes.py stack --region $region --output "template-$region.yaml" /path/to/template
-
 done
-
+```
 
 
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
-
  1 Fork the repository
  2 Create a feature branch
  3 Make your changes
