@@ -1,3 +1,3 @@
 boto3
-cfn_flip
+cfn-tools
 jinja2
