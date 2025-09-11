@@ -4,3 +4,13 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "crepes"
+version = "0.1.0"
+description = "CloudFormation template processor"
+dependencies = [
+    "boto3",
+    "cfn-tools",
+    "jinja2"
+]
