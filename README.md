@@ -183,9 +183,9 @@ Crepes supports Jinja templating to make templates more dynamic:
 
 Crepes provides built-in variables that can be used in templates:
 
- • AWS::Region - The AWS region
- • AWS::AccountId - The AWS account ID
- • AWS::StackName - The CloudFormation stack name
+ * AWS::Region - The AWS region
+ * AWS::AccountId - The AWS account ID
+ * AWS::StackName - The CloudFormation stack name
 
 ##### Custom Variables
 
