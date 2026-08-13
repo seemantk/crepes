@@ -1,5 +1,5 @@
 # crepes
-tl;dr: instead of editing massive CloudFormation files, edit small yaml files arragned in diretories that suit your organization prefernce.
+tl;dr: instead of editing massive CloudFormation files, edit small yaml files arranged in diretories that suit your organization prefernce.
 
 This project was inspired by [grapes](https://github.com/0x4447/0x4447-cli-node-grapes), an excellent tool written in Node.js. I love using CloudFormation templates. I had the same needs as [they did](https://github.com/0x4447/0x4447-cli-node-grapes/blob/development/README.md#-grapes), and using that tool opened up some interesting possbilities in my mind.
 If I was halfway competent in node, I would have submitted pull requests directly to grapes.  But I'm more comfortable in python, so I created this tool to address some of the needs I had as an AWS Architect and DevOps consultant.
