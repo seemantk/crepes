@@ -1,6 +1,6 @@
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
-from cfntools import dump_json
+from cfn_flip import dump_json
 
 def importify(stack, outfile):
     # Create list of resources. This is required when using the AWS CLI to deploy CloudFormation stacks
