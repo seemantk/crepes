@@ -14,3 +14,6 @@ dependencies = [
     "cfn-tools",
     "jinja2"
 ]
+
+[project.scripts]
+crepes = "crepes.crepes:main"
