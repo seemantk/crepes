@@ -1,7 +1,7 @@
-# Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
+# Copyright 2020-2026 Seemant Kulleen <seemantk@gmail.com>
 
 import argparse
-import _stackify, _cluseau
+from . import _stackify, _cluseau
 
 def _parse_command_line_arguments():
     # Helper to parse keyword arguments for Jinja variables
