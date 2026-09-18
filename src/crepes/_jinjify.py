@@ -1,6 +1,6 @@
 # Copyright 2020-2022 Seemant Kulleen <seemantk@gmail.com>
 
-from cfn_tools import load_yaml
+from cfn_flip import load_yaml
 from jinja2 import Template
 
 # Read raw YAML file and process as a Jinja template
