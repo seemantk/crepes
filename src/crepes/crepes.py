@@ -22,14 +22,12 @@ def _parse_command_line_arguments():
     crepes = subparser.add_parser('stack')
     cluseau = subparser.add_parser('spread')
 
-    # Common arguments
-    parser.add_argument(
+    # Crepes arguments
+    crepes.add_argument(
         'directory',
         help='source directory (Stack) or destination directory (Unstack)',
         metavar='dir', type=str
     )
-
-    # Crepes arguments
     crepes.add_argument(
         '--region',
         help='AWS Region',
@@ -54,6 +52,11 @@ def _parse_command_line_arguments():
     )
 
     # Cluseau arguments
+    cluseau.add_argument(
+        'directory',
+        help='source directory (Stack) or destination directory (Unstack)',
+        metavar-'dir', type=str
+    )
     cluseau.add_argument(
         '--source',
         help='source CloudFormation template',
