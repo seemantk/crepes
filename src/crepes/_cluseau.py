@@ -7,7 +7,7 @@
 
 
 import os
-from cfn_tools import load_yaml, dump_yaml
+from cfntools import load_yaml, dump_yaml
 
 # Constants
 SECTIONS = ['Description', 'Metadata', 'Parameters', 'Mappings','Conditions', 'Transform', 'Resources', 'Outputs']
