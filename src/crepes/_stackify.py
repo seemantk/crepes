@@ -2,7 +2,7 @@
 
 import os
 import boto3
-from cfn_tools import dump_yaml
+from cfntools import dump_yaml
 from . import _importify, _jinjify
 
 
