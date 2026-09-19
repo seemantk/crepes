@@ -55,7 +55,7 @@ def _parse_command_line_arguments():
     cluseau.add_argument(
         'directory',
         help='source directory (Stack) or destination directory (Unstack)',
-        metavar-'dir', type=str
+        metavar='dir', type=str
     )
     cluseau.add_argument(
         '--source',
